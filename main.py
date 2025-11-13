@@ -1,4 +1,4 @@
-from meta_progam import MetaProgram
+from gui_progam import MetaProgramConfig
 
 if __name__ == "__main__":
-    MetaProgram().run()
+    MetaProgramConfig(custom_speed_given=1).run()

@@ -6,26 +6,37 @@ pygame.init()
 FONT = pygame.font.Font(None, 24)
 CELL = 16
 
-class MetaProgram:
-    def __init__(self):
-        self.controller = SimulationController()
-        self.controller.configure_world()
+class MetaProgramConfig:
+    def __init__(self, custom_speed_given:float):
+        self.config = None # call from settings window
+        self.config = {
+            "width": 128,
+            "height": 64,
+            "food_sources": 10,
+            "traps": 20,
+            "walls": 100,
+            "nb_ant_explo": 6,
+            "nb_ant_recol": 6,
+            "nb_ant_comba": 6,
+        }
+        self.controller = SimulationController(custom_speed=custom_speed_given)
+        self.controller.configure_world(
+            width=128,
+            height=64,
+            food_sources=10,
+            traps=20,
+            walls=100,
+            nb_ant_explo=6,
+            nb_ant_recol=6,
+            nb_ant_comba=6,
+        )
         self.thread = threading.Thread(target=self.controller.run, daemon=True)
         self.thread.start()
 
-        self.screen = pygame.display.set_mode((1280, 720))
-        pygame.display.set_caption("AiFAnts - Meta Program")
+        self.screen = pygame.display.set_mode((1900, 1080))
+        pygame.display.set_caption("Aifants - interface pro gaming")
         self.clock = pygame.time.Clock()
         self.running = True
-
-        # Config par défaut
-        self.config = {
-            "width": 60,
-            "height": 40,
-            "food_sources": 5,
-            "traps": 5,
-            "walls": 100,
-        }
 
     def run(self):
         while self.running:
@@ -36,6 +47,7 @@ class MetaProgram:
         pygame.quit()
 
     def handle_events(self):
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -103,6 +115,15 @@ class MetaProgram:
         line(f"Nourriture : {self.config['food_sources']}")
         line(f"Pièges : {self.config['traps']}")
         line(f"Murs : {self.config['walls']}")
+
+        if self.config is not None:
+            line(f"Taille : {self.config['width']}x{self.config['height']}")
+            line(f"Nourriture : {self.config['food_sources']}")
+            line(f"Pièges : {self.config['traps']}")
+            line(f"Murs : {self.config['walls']}")
+        else:
+            line("(Aucune configuration chargée)", (180, 180, 180))
+
         if self.controller.paused:
             line("-- PAUSED --", (255, 100, 100))
         else:
@@ -115,4 +136,5 @@ class MetaProgram:
         self.draw_panel()
 
 if __name__ == "__main__":
-    MetaProgram().run()
+
+    MetaProgramConfig(custom_speed_given=1).run()
