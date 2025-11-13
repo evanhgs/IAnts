@@ -10,7 +10,7 @@ class SimulationController:
     def __init__(self, custom_speed: float):
         print(f"[SimulationController] __init__ speed={custom_speed}")
         self.running = False
-        self.paused = True
+        self.paused = False
         self.speed = custom_speed
         self.world = None
         self.pheromone = None
@@ -71,7 +71,7 @@ class SimulationController:
     def set_speed(self, s):
         with self.lock:
             old = self.speed
-            self.speed = max(0.1, min(s, 100))
+            self.speed = max(0.1, min(s, 1000000))
             print(f"[set_speed] speed changed from {old} to {self.speed}")
 
     def reset(self):
